@@ -1,5 +1,3 @@
-# def ft_seed_invetory(seed_type: str, quantity: int, unit: str) -> None:
-
 def ft_seed_inventory(seed: str, count: int, unit: str) -> None:
     if unit not in ("grams", "packets", "area"):
         unit = "Unknown unit type"
