@@ -133,3 +133,4 @@ if __name__ == "__main__":
     print("Height validation test:", GardenManager.validate_height(10))
     print(f"Garden scores - Alice: {alice_score}, Bob: {bob_score}")
     print("Total gardens managed:", GardenManager.total_managed())
+ 
