@@ -39,9 +39,10 @@ class Garden:
         self.owner = owner
         self.plants = []
 
-    def add_plant(self, plant):
+    def add_plant(self, plant, announce=True):
         self.plants.append(plant)
-        print(f"Added {plant.name} to {self.owner}'s garden")
+        if announce:
+            print(f"Added {plant.name} to {self.owner}'s garden")
 
     def grow_all(self):
         print(f"{self.owner} is helping all plants grow...")
@@ -109,7 +110,7 @@ if __name__ == "__main__":
     manager = GardenManager.create_garden_network()
     alice = Garden("Alice")
     bob = Garden("Bob")
-    bob.add_plant(Plant("cactus", 92))
+    bob.add_plant(Plant("cactus", 92), announce=False)
     manager.add_garden(alice)
     manager.add_garden(bob)
     alice.add_plant(Plant("oak tree", 100))
@@ -122,7 +123,8 @@ if __name__ == "__main__":
     print(" ")
     alice_score = GardenManager.calculate_garden_score(alice)
     bob_score = GardenManager.calculate_garden_score(bob)
-    regular, flowering, prize = GardenManager.GardenStats.plant_types(alice.plants)
+    regular, flowering, prize = (
+        GardenManager.GardenStats.plant_types(alice.plants))
     total_growth = GardenManager.GardenStats.total_growth(alice.plants)
     print(f"Plants added: {len(alice.plants)}, Total growth: {total_growth}cm")
     print(f"Plant types: {regular} regular, {flowering} flowering, {prize} "
