@@ -87,10 +87,10 @@ class GardenManager:
 
     def __init__(self):
         self.gardens = {}
-        GardenManager.total_gardens += 1
 
     def add_garden(self, garden: Garden):
         self.gardens[garden.owner] = garden
+        GardenManager.total_gardens += 1
 
     @classmethod
     def total_managed(cls):
