@@ -3,38 +3,38 @@
 
 class SecurePlant:
     def __init__(self, name: str, height: int, age: int) -> None:
-        self.__name = name.capitalize()
-        self.__height = height
-        self.__age = age
-        print(f"Plant created: {self.__name}: {float(self.__height)}cm, "
-              f"{self.__age} days old\n")
+        self._name = name.capitalize()
+        self._height = height
+        self._age = age
+        print(f"Plant created: {self._name}: {float(self._height)}cm, "
+              f"{self._age} days old\n")
 
     def get_height(self):
-        return self.__height
+        return self._height
 
     def set_height(self, value: int):
         if value >= 0:
-            self.__height = value
+            self._height = value
             print(f"Height updated: {value}cm")
         else:
-            print(f"{self.__name}: Error, height can't be negative\n"
+            print(f"{self._name}: Error, height can't be negative\n"
                   "Height update rejected")
 
     def get_age(self):
-        return self.__age
+        return self._age
 
     def set_age(self, value: int):
         if value >= 0:
-            self.__age = value
+            self._age = value
             print(f"Age updated: {value} days\n")
         else:
-            print(f"{self.__name}: Error, age can't be negative\n"
+            print(f"{self._name}: Error, age can't be negative\n"
                   "Age update rejected")
 
     def show(self):
         print(
-            f"\nCurrent state: {self.__name}: "
-            f"{float(self.__height)}cm, {self.__age} days")
+            f"\nCurrent state: {self._name}: "
+            f"{float(self._height)}cm, {self._age} days")
 
 
 if __name__ == "__main__":
