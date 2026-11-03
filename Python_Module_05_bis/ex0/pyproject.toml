@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "sealed-laboratory"
+version = "0.1.0"
+description = "Reagent supply for the Alchemist's laboratory"
+authors = []
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+pandas = ">=2.1.0"
+numpy = ">=1.25.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
