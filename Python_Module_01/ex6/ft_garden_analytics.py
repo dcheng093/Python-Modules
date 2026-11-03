@@ -21,6 +21,9 @@ class Plant:
     def is_older_than_year(days: int) -> bool:
         return days > 365
 
+# @classmethod exists comes down to clean object-oriented design
+# Create objects in different formats or track global class data
+
     @classmethod
     def anonymous(cls):
         return cls("Unknown plant", 0, 0)
