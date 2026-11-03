@@ -13,6 +13,8 @@ def spell_transformer(spells: list[str]) -> list[str]:
 
 
 def mage_stats(mages: list[dict]) -> dict:
+    if not mages:
+        return {'max_power': 0, 'min_power': 0, 'avg_power': 0.0}
     max_power: int = max(mages, key=lambda mage: mage['power'])['power']
     min_power: int = min(mages, key=lambda mage: mage['power'])['power']
     avg_power: float = round(

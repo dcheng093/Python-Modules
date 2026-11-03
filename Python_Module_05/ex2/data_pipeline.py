@@ -35,7 +35,7 @@ class NumericProcessor(DataProcessor):
             return all(isinstance(x, (int, float)) for x in data)
         return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(self, data: int | float | list[int | float]) -> None:
         if not self.validate(data):
             raise ValueError("Improper numeric data")
         if isinstance(data, list):
@@ -53,7 +53,7 @@ class TextProcessor(DataProcessor):
             return all(isinstance(x, str) for x in data)
         return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(self, data: str | list[str]) -> None:
         if not self.validate(data):
             raise ValueError("Improper text data")
         if isinstance(data, list):
@@ -64,7 +64,7 @@ class TextProcessor(DataProcessor):
 
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
-        def valid_dict(d):
+        def valid_dict(d: Any) -> bool:
             return (
                 isinstance(d, dict)
                 and all(isinstance(k, str) and
@@ -76,11 +76,12 @@ class LogProcessor(DataProcessor):
             return all(valid_dict(x) for x in data)
         return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(self,
+               data: dict[str, str] | list[dict[str, str]]) -> None:
         if not self.validate(data):
             raise ValueError("Improper log data")
 
-        def format_log(d):
+        def format_log(d: dict[str, str]) -> str:
             return f"{d.get('log_level', '')}: {d.get('log_message', '')}"
         if isinstance(data, list):
             for d in data:
@@ -95,16 +96,28 @@ class ExportPlugin(Protocol):
 
 
 class CSVExportPlugin:
+    @staticmethod
+    def _field(value: str) -> str:
+        if any(c in value for c in ',"\n'):
+            return '"' + value.replace('"', '""') + '"'
+        return value
+
     def process_output(self, data: List[Tuple[int, str]]) -> None:
-        values = [value for _, value in data]
+        values = [self._field(value) for _, value in data]
         print("CSV Output:")
         print(",".join(values))
 
 
 class JSONExportPlugin:
+    @staticmethod
+    def _string(value: str) -> str:
+        escaped = (value.replace("\\", "\\\\").replace('"', '\\"')
+                   .replace("\n", "\\n"))
+        return '"' + escaped + '"'
+
     def process_output(self, data: List[Tuple[int, str]]) -> None:
         print("JSON Output:")
-        items = [f'"item_{idx}": "{value}"' for idx, value in data]
+        items = [f'"item_{idx}": {self._string(value)}' for idx, value in data]
         print("{" + ", ".join(items) + "}")
 
 

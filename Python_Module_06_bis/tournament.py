@@ -21,9 +21,9 @@ def battle(opponents: list[Opponent]) -> None:
                 second = second_factory.create_base()
                 print("\n* Battle *")
                 print(first.describe())
-                print(" vs.")
+                print("vs.")
                 print(second.describe())
-                print(" now fight!")
+                print("now fight!")
                 for line in first_strategy.act(first):
                     print(line)
                 for line in second_strategy.act(second):

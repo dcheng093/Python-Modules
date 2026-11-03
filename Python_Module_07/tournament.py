@@ -1,10 +1,13 @@
-from ex0 import FlameFactory, AquaFactory
+from ex0 import CreatureFactory, FlameFactory, AquaFactory
 from ex1 import HealingCreatureFactory, TransformCreatureFactory
-from ex2 import NormalStrategy, AggressiveStrategy, DefensiveStrategy
+from ex2 import (BattleStrategy, InvalidStrategyError, NormalStrategy,
+                 AggressiveStrategy, DefensiveStrategy)
+
+Opponent = tuple[CreatureFactory, BattleStrategy]
 
 
-def format_opponents(opponents):
-    result = []
+def format_opponents(opponents: list[Opponent]) -> str:
+    result: list[str] = []
 
     for factory, strategy in opponents:
         factory_name = factory.__class__.__name__
@@ -18,10 +21,10 @@ def format_opponents(opponents):
             creature_name = factory_name.replace("Factory", "")
         strategy_name = strategy.__class__.__name__.replace("Strategy", "")
         result.append(f"({creature_name}+{strategy_name})")
-    return " [ " + ", ".join(result) + " ]"
+    return "[ " + ", ".join(result) + " ]"
 
 
-def battle(opponents):
+def battle(opponents: list[Opponent]) -> None:
     print("*** Tournament ***")
     print(f"{len(opponents)} opponents involved")
     for i in range(len(opponents)):
@@ -32,20 +35,20 @@ def battle(opponents):
             c2 = factory2.create_base()
             print("\n* Battle *")
             print(c1.describe())
-            print(" vs.")
+            print("vs.")
             print(c2.describe())
-            print(" now fight!")
+            print("now fight!")
             try:
                 for action in strat1.act(c1):
                     print(action)
                 for action in strat2.act(c2):
                     print(action)
-            except Exception as e:
+            except InvalidStrategyError as e:
                 print(f"Battle error, aborting tournament: {e}")
                 return
 
 
-def main():
+def main() -> None:
     flame = FlameFactory()
     aqua = AquaFactory()
     healing = HealingCreatureFactory()
@@ -53,35 +56,18 @@ def main():
     normal = NormalStrategy()
     aggressive = AggressiveStrategy()
     defensive = DefensiveStrategy()
-    print("Tournament 0 (basic)")
-    print(format_opponents([
-        (flame, normal),
-        (healing, defensive)
-    ]))
-    battle([
-        (flame, normal),
-        (healing, defensive)
-    ])
-    print("\nTournament 1 (error)")
-    print(format_opponents([
-        (flame, aggressive),
-        (healing, defensive)
-    ]))
-    battle([
-        (flame, aggressive),
-        (healing, defensive)
-    ])
-    print("\nTournament 2 (multiple)")
-    print(format_opponents([
-        (aqua, normal),
-        (healing, defensive),
-        (transform, aggressive)
-    ]))
-    battle([
-        (aqua, normal),
-        (healing, defensive),
-        (transform, aggressive)
-    ])
+    tournaments: list[tuple[str, list[Opponent]]] = [
+        ("Tournament 0 (basic)", [(flame, normal), (healing, defensive)]),
+        ("Tournament 1 (error)", [(flame, aggressive), (healing, defensive)]),
+        ("Tournament 2 (multiple)", [(aqua, normal), (healing, defensive),
+                                     (transform, aggressive)]),
+    ]
+    for index, (title, opponents) in enumerate(tournaments):
+        if index > 0:
+            print()
+        print(title)
+        print(format_opponents(opponents))
+        battle(opponents)
 
 
 if __name__ == "__main__":

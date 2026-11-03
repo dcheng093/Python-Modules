@@ -1,50 +1,52 @@
 #!/usr/bin/python3.10
 
-from math import sqrt
+import math
 
 
-def distance_between(pos1, pos2):
+def distance_between(pos1: tuple[float, float, float],
+                     pos2: tuple[float, float, float]) -> float:
     x1, y1, z1 = pos1
     x2, y2, z2 = pos2
-    return sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
 
 
-def get_player_pos() -> tuple:
+def get_player_pos() -> tuple[float, float, float]:
     while True:
+        raw = input("Enter new coordinates as floats in format 'x,y,z': ")
         try:
-            user_input = input(
-                "Enter new coordinates as floats in format 'x,y,z': "
-            )
-            parts = user_input.split(",")
-            if len(parts) != 3:
-                raise ValueError("Wrong number of values")
-            coords = []
-            for part in parts:
-                try:
-                    coords.append(float(part.strip()))
-                except ValueError as e:
-                    print(f"Error on parameter '{part.strip()}': {e}")
-                    break
-            else:
-                return tuple(coords)
+            x_str, y_str, z_str = raw.split(",")
         except ValueError:
             print("Invalid syntax")
+            continue
+        current = x_str
+        try:
+            x = float(x_str)
+            current = y_str
+            y = float(y_str)
+            current = z_str
+            z = float(z_str)
+        except ValueError as e:
+            print(f"Error on parameter '{current.strip()}': {e}")
+            continue
+        return (x, y, z)
 
 
 if __name__ == "__main__":
-    print("=== Game Coordinate System ===\n")
-    print("Get a first set of coordinates")
-    pos1 = get_player_pos()
-    print(f"Got a first tuple: {pos1}")
-    x, y, z = pos1
-    print(f"It includes: X={x}, Y={y}, Z={z}")
-    print(f"Distance to center: {distance_between((0, 0, 0), pos1):.4f}")
-    print("\nGet a second set of coordinates")
-    pos2 = get_player_pos()
-    print(
-        f"Distance between the 2 sets of coordinates: "
-        f"{distance_between(pos1, pos2):.4f}"
-    )
+    print("=== Game Coordinate System ===")
+    try:
+        print("\nGet a first set of coordinates")
+        pos1 = get_player_pos()
+        print(f"Got a first tuple: {pos1}")
+        print(f"It includes: X={pos1[0]}, Y={pos1[1]}, Z={pos1[2]}")
+        center = (0.0, 0.0, 0.0)
+        print("Distance to center: "
+              f"{round(distance_between(center, pos1), 4)}")
+        print("\nGet a second set of coordinates")
+        pos2 = get_player_pos()
+        print("Distance between the 2 sets of coordinates: "
+              f"{round(distance_between(pos1, pos2), 4)}")
+    except EOFError:
+        print("\nInput closed - leaving the coordinate system.")
 
 # def parse_coords(coord_str):
 #     try:

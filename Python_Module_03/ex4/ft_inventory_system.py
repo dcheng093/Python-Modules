@@ -3,8 +3,7 @@ import sys
 
 if __name__ == "__main__":
     print("=== Inventory System Analysis ===")
-    inventory = {}
-    order = []
+    inventory: dict[str, int] = {}
     for arg in sys.argv[1:]:
         if ":" not in arg:
             print(f"Error - invalid parameter '{arg}'")
@@ -18,27 +17,26 @@ if __name__ == "__main__":
         except ValueError as e:
             print(f"Quantity error for '{name}': {e}")
             continue
-        inventory[name] = qty
-        order.append(name)
+        inventory.update({name: qty})
     print(f"Got inventory: {inventory}")
     items = list(inventory.keys())
     print(f"Item list: {items}")
     total = sum(inventory.values())
     print(f"Total quantity of the {len(inventory)} items: {total}")
-    for name in inventory:
-        percent = (inventory[name] / total) * 100
-        print(f"Item {name} represents {round(percent, 1)}%")
-    most_item = None
-    least_item = None
-    for name in order:
-        if most_item is None or inventory[name] > inventory[most_item]:
-            most_item = name
-        if least_item is None or inventory[name] < inventory[least_item]:
-            least_item = name
-    if most_item:
+    if total != 0:
+        for name in items:
+            percent = inventory[name] / total * 100
+            print(f"Item {name} represents {round(percent, 1)}%")
+    if len(items) > 0:
+        most_item = items[0]
+        least_item = items[0]
+        for name in items:
+            if inventory[name] > inventory[most_item]:
+                most_item = name
+            if inventory[name] < inventory[least_item]:
+                least_item = name
         print(f"Item most abundant: {most_item} "
               f"with quantity {inventory[most_item]}")
-    if least_item:
         print(f"Item least abundant: {least_item} "
               f"with quantity {inventory[least_item]}")
     inventory.update({"magic_item": 1})

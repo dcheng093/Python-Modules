@@ -33,9 +33,7 @@ class NumericProcessor(DataProcessor):
             return all(self._is_number(item) for item in data)
         return self._is_number(data)
 
-    def ingest(  # type: ignore[override]
-        self, data: int | float | list[int | float]
-    ) -> None:
+    def ingest(self, data: int | float | list[int | float]) -> None:
         if not self.validate(data):
             raise ValueError("Improper numeric data")
         items = data if isinstance(data, list) else [data]
@@ -48,9 +46,7 @@ class TextProcessor(DataProcessor):
             return all(isinstance(item, str) for item in data)
         return isinstance(data, str)
 
-    def ingest(  # type: ignore[override]
-        self, data: str | list[str]
-    ) -> None:
+    def ingest(self, data: str | list[str]) -> None:
         if not self.validate(data):
             raise ValueError("Improper text data")
         items = data if isinstance(data, list) else [data]
@@ -70,9 +66,7 @@ class LogProcessor(DataProcessor):
             return all(self._is_log(item) for item in data)
         return self._is_log(data)
 
-    def ingest(  # type: ignore[override]
-        self, data: dict[str, str] | list[dict[str, str]]
-    ) -> None:
+    def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
         if not self.validate(data):
             raise ValueError("Improper log data")
         items = data if isinstance(data, list) else [data]
@@ -84,10 +78,10 @@ class LogProcessor(DataProcessor):
 
 def extract(proc: DataProcessor, label: str, count: int) -> None:
     plural = "value" if count == 1 else "values"
-    print(f" Extracting {count} {plural}...")
+    print(f"Extracting {count} {plural}...")
     for _ in range(count):
         rank, value = proc.output()
-        print(f" {label} {rank}: {value}")
+        print(f"{label} {rank}: {value}")
 
 
 def main() -> None:
@@ -95,37 +89,161 @@ def main() -> None:
 
     print("\nTesting Numeric Processor...")
     num = NumericProcessor()
-    print(f" Trying to validate input '42': {num.validate(42)}")
-    print(f" Trying to validate input 'Hello': {num.validate('Hello')}")
-    print(" Test invalid ingestion of string 'foo' without prior validation:")
+    print(f"Trying to validate input '42': {num.validate(42)}")
+    print(f"Trying to validate input 'Hello': {num.validate('Hello')}")
+    print("Test invalid ingestion of string 'foo' without prior validation:")
     try:
         num.ingest("foo")  # wrong type on purpose: mypy flags this line
     except ValueError as e:
-        print(f" Got exception: {e}")
+        print(f"Got exception: {e}")
     numbers: list[int | float] = [1, 2, 3, 4, 5]
-    print(f" Processing data: {numbers}")
+    print(f"Processing data: {numbers}")
     num.ingest(numbers)
     extract(num, "Numeric value", 3)
 
     print("\nTesting Text Processor...")
     text = TextProcessor()
-    print(f" Trying to validate input '42': {text.validate(42)}")
+    print(f"Trying to validate input '42': {text.validate(42)}")
     words = ["Hello", "Nexus", "World"]
-    print(f" Processing data: {words}")
+    print(f"Processing data: {words}")
     text.ingest(words)
     extract(text, "Text value", 1)
 
     print("\nTesting Log Processor...")
     log = LogProcessor()
-    print(f" Trying to validate input 'Hello': {log.validate('Hello')}")
+    print(f"Trying to validate input 'Hello': {log.validate('Hello')}")
     logs = [
         {"log_level": "NOTICE", "log_message": "Connection to server"},
         {"log_level": "ERROR", "log_message": "Unauthorized access!!"},
     ]
-    print(f" Processing data: {logs}")
+    print(f"Processing data: {logs}")
     log.ingest(logs)
     extract(log, "Log entry", 2)
 
 
 if __name__ == "__main__":
     main()
+
+
+# class DataProcessor(ABC):
+#     @abstractmethod
+#     def validate(self, data: Any) -> bool:
+#         pass
+
+#     @abstractmethod
+#     def process(self, data: Any) -> str:
+#         pass
+
+#     def format_output(self, result: str) -> str:
+#         return result
+
+
+# class NumericProcessor(DataProcessor):
+#     def __init__(self):
+#         pass
+
+#     def validate(self, data: Any) -> bool:
+#         return (
+#             isinstance(data, list)
+#             and all(isinstance(x, (int, float)) for x in data)
+#         )
+
+#     def process(self, data: Any) -> str:
+#         if not self.validate(data):
+#             raise ValueError("Invalid numeric data")
+#         count = len(data)
+#         total = sum(data)
+#         avg = total / count if count else 0
+#         return f"Processed {count} numeric values, sum={total}, avg={avg}"
+
+#     def format_output(self, result: str) -> str:
+#         return result
+
+
+# class TextProcessor(DataProcessor):
+#     def __init__(self):
+#         pass
+
+#     def validate(self, data: Any) -> bool:
+#         return isinstance(data, str)
+
+#     def process(self, data: Any) -> str:
+#         if not self.validate(data):
+#             raise ValueError("Invalid text data")
+#         char_count = len(data)
+#         word_count = len(data.split())
+#         return f"Processed text: {char_count} characters, {word_count} words"
+
+#     def format_output(self, result: str) -> str:
+#         return result
+
+
+# class LogProcessor(DataProcessor):
+#     def __init__(self):
+#         pass
+
+#     def validate(self, data: Any) -> bool:
+#         if not isinstance(data, str):
+#             return False
+#         return any(data.startswith(level) for level in ("ERROR:", "INFO:",
+#                                                         "WARNING:"))
+
+#     def process(self, data: Any) -> str:
+#         if not self.validate(data):
+#             raise ValueError("Invalid log entry")
+#         level, message = data.split(":", 1)
+#         message = message.strip()
+#         return f"{level} level detected: {message}"
+
+#     def format_output(self, result: str) -> str:
+#         if result.startswith("ERROR"):
+#             return f"[ALERT] {result}"
+#         elif result.startswith("INFO"):
+#             return f"[INFO] {result}"
+#         else:
+#             return f"[WARNING] {result}"
+
+
+# if __name__ == "__main__":
+#     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
+#     numeric_data = [1, 2, 3, 4, 5]
+#     text_data = "Hello Nexus World"
+#     log_data = "ERROR: Connection timeout"
+#     numeric_processor = NumericProcessor()
+#     text_processor = TextProcessor()
+#     log_processor = LogProcessor()
+#     print("Initializing Numeric Processor...")
+#     print(f"Processing data: {numeric_data}")
+#     print("Validation: Numeric data verified")
+#     output = numeric_processor.format_output(
+#         numeric_processor.process(numeric_data))
+#     print(f"Output: {output}\n")
+#     print("Initializing Text Processor...")
+#     print(f'Processing data: "{text_data}"')
+#     print("Validation: Text data verified")
+#     output = text_processor.format_output(text_processor.process(text_data))
+#     print(f"Output: {output}\n")
+#     print("Initializing Log Processor...")
+#     print(f'Processing data: "{log_data}"')
+#     print("Validation: Log entry verified")
+#     output = log_processor.format_output(log_processor.process(log_data))
+#     print(f"Output: {output}\n")
+#     print("=== Polymorphic Processing Demo ===")
+#     print("Processing multiple data types through same interface...")
+#     processors = [
+#         NumericProcessor(),
+#         TextProcessor(),
+#         LogProcessor()
+#     ]
+#     data_samples = [
+#         [1, 2, 3],
+#         "Twelve Chars",
+#         "INFO: System ready"
+#     ]
+#     for i, (processor, data) in enumerate(zip(processors, data_samples),
+#                                           start=1):
+#         result = processor.process(data)
+#         output = processor.format_output(result)
+#         print(f"Result {i}: {output}")
+
+#     print("\nFoundation systems online. Nexus ready for advanced streams.")

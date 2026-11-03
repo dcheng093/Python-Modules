@@ -1,6 +1,11 @@
 #!/usr/bin/env python3.10
 
 if __name__ == "__main__":
-    print("=== Welcome to My Garden ===\n"
-          "Plant: Rose\nHeight: 25cm\nAge: 30 days\n"
-          "\n=== End of Program ===")
+    name = "Rose"
+    height = 25
+    age = 30
+    print("=== Welcome to My Garden ===")
+    print(f"Plant: {name}")
+    print(f"Height: {height}cm")
+    print(f"Age: {age} days")
+    print("\n=== End of Program ===")

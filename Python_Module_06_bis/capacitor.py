@@ -5,7 +5,7 @@ def main() -> None:
     factory = TransformCreatureFactory()
     print("Testing Creature with transform capability")
 
-    print(" base:")
+    print("base:")
     base = factory.create_base()
     print(base.describe())
     print(base.attack())
@@ -13,7 +13,7 @@ def main() -> None:
     print(base.attack())
     print(base.revert())
 
-    print(" evolved:")
+    print("evolved:")
     evolved = factory.create_evolved()
     print(evolved.describe())
     print(evolved.attack())

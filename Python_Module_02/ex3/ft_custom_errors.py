@@ -1,21 +1,21 @@
 #!/usr/bin/env python3.10
 
 class GardenError(Exception):
-    def __init__(self, message="Unknown garden error"):
+    def __init__(self, message: str = "Unknown garden error") -> None:
         super().__init__(message)
 
 
 class PlantError(GardenError):
-    def __init__(self, message="Unknown plant error"):
+    def __init__(self, message: str = "Unknown plant error") -> None:
         super().__init__(message)
 
 
 class WaterError(GardenError):
-    def __init__(self, message="Unknown watering error"):
+    def __init__(self, message: str = "Unknown watering error") -> None:
         super().__init__(message)
 
 
-def test_plant_error():
+def test_plant_error() -> None:
     print("\nTesting PlantError...")
     try:
         raise PlantError("The tomato plant is wilting!")
@@ -23,7 +23,7 @@ def test_plant_error():
         print(f"Caught PlantError: {e}")
 
 
-def test_water_error():
+def test_water_error() -> None:
     print("\nTesting WaterError...")
     try:
         raise WaterError("Not enough water in the tank!")
@@ -31,7 +31,7 @@ def test_water_error():
         print(f"Caught WaterError: {e}")
 
 
-def test_garden_error():
+def test_garden_error() -> None:
     print("\nTesting catching all garden errors...")
 
     try:

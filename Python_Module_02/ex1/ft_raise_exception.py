@@ -1,30 +1,27 @@
 #!/usr/bin/python3.10
 
-def input_temperature(temp_str):
-    try:
-        num = int(temp_str)
-        if num < 0:
-            print(f"Caught input_temperature error: {num}°C "
-                  "is too cold for plants (min 0°C)\n")
-        elif num > 40:
-            print(f"Caught input_temperature error: {num}°C "
-                  "is too hot for plants (max 40°C)\n")
-        else:
-            print(f"Temperature is now {num}°C\n")
-        return num
-    except ValueError as e:
-        print(f"Caught input_temperature error: {e}\n")
+def input_temperature(temp_str: str) -> int:
+    temp = int(temp_str)
+    if temp > 40:
+        raise ValueError(f"{temp}°C is too hot for plants (max 40°C)")
+    if temp < 0:
+        raise ValueError(f"{temp}°C is too cold for plants (min 0°C)")
+    return temp
 
 
-def test_temperature():
-    print("=== Garden Temperature Checker ===\n")
+def test_temperature() -> None:
+    print("=== Garden Temperature Checker ===")
 
     tests = ["25", "abc", "100", "-50"]
 
     for test in tests:
-        print(f"Testing temperature: {test}")
-        input_temperature(test)
-    print("All tests completed - program didn't crash!")
+        print(f"\nInput data is '{test}'")
+        try:
+            temp = input_temperature(test)
+            print(f"Temperature is now {temp}°C")
+        except ValueError as e:
+            print(f"Caught input_temperature error: {e}")
+    print("\nAll tests completed - program didn't crash!")
 
 
 if __name__ == "__main__":

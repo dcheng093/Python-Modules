@@ -18,11 +18,7 @@ if __name__ == "__main__":
     print(f"\nScore dict: {scores}")
     avg = sum(scores.values()) / len(scores)
     print(f"Score average is {round(avg, 2)}")
-    high_scores = {
-        name: score
-        for name, score in scores.items()
-        if score > avg
-    }
+    high_scores = {n: s for n, s in scores.items() if s > avg}
     print(f"High scores: {high_scores}")
 
 # def list_comprehension(list_players):

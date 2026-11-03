@@ -3,5 +3,6 @@
 #           int(input("Enter width: ")))
 
 def ft_garden_name():
-    print("Garden: ", (input("Enter garden name: ")),
-          "\nStatus: Growing well!")
+    name = input("Enter garden name: ")
+    print(f"Garden: {name}")
+    print("Status: Growing well!")

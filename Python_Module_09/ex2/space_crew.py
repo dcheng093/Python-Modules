@@ -32,7 +32,7 @@ class SpaceMission(BaseModel):
     budget_millions: float = Field(ge=1.0, le=10000.0)
 
     @model_validator(mode='after')
-    def validate_info(self):
+    def validate_info(self) -> "SpaceMission":
         mission_id = self.mission_id
         if not mission_id.startswith("M"):
             raise ValueError("Mission ID must start with M")
@@ -40,7 +40,7 @@ class SpaceMission(BaseModel):
                          for member in self.crew)
         if not has_leader:
             raise ValueError(
-                "Mission must include at least one Commander or Captain"
+                "Mission must have at least one Commander or Captain"
                 )
         experienced_mems = sum(1 for member in self.crew
                                if member.years_experience >= 5)

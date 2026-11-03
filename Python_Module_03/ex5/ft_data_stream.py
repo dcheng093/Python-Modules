@@ -2,9 +2,10 @@
 
 # from time import perf_counter as timer
 import random
+import typing
 
 
-def gen_event():
+def gen_event() -> typing.Generator[tuple[str, str], None, None]:
     names = ["alice",
              "bob",
              "charlie",
@@ -35,7 +36,8 @@ def gen_event():
         yield (player, action)
 
 
-def get_event(events):
+def consume_event(events: list[tuple[str, str]]
+                  ) -> typing.Generator[tuple[str, str], None, None]:
     while len(events) > 0:
         idx = random.randrange(len(events))
         picked = events.pop(idx)
@@ -48,11 +50,11 @@ if __name__ == "__main__":
     for i in range(1000):
         name, action = next(stream)
         print(f"Event {i}: Player {name} did action {action}")
-    saved_events = []
+    saved_events: list[tuple[str, str]] = []
     for _ in range(10):
         saved_events.append(next(stream))
     print(f"Built list of 10 events: {saved_events}")
-    for event in get_event(saved_events):
+    for event in consume_event(saved_events):
         print(f"Got event from list: {event}")
         print(f"Remains in list: {saved_events}")
 

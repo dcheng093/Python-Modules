@@ -5,9 +5,9 @@ from typing import Any
 
 
 class DataProcessor(ABC):
-    def __init__(self):
-        self._data = []
-        self._index = 0
+    def __init__(self) -> None:
+        self._data: list[str] = []
+        self._index: int = 0
 
     @abstractmethod
     def validate(self, data: Any) -> bool:
@@ -34,7 +34,7 @@ class NumericProcessor(DataProcessor):
             return all(isinstance(x, (int, float)) for x in data)
         return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(self, data: int | float | list[int | float]) -> None:
         if not self.validate(data):
             raise ValueError("Improper numeric data")
         if isinstance(data, list):
@@ -52,7 +52,7 @@ class TextProcessor(DataProcessor):
             return all(isinstance(x, str) for x in data)
         return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(self, data: str | list[str]) -> None:
         if not self.validate(data):
             raise ValueError("Improper text data")
         if isinstance(data, list):
@@ -63,7 +63,7 @@ class TextProcessor(DataProcessor):
 
 class LogProcessor(DataProcessor):
     def validate(self, data: Any) -> bool:
-        def valid_dict(d):
+        def valid_dict(d: Any) -> bool:
             return (
                 isinstance(d, dict)
                 and all(isinstance(k, str) and
@@ -75,11 +75,12 @@ class LogProcessor(DataProcessor):
             return all(valid_dict(x) for x in data)
         return False
 
-    def ingest(self, data: Any) -> None:
+    def ingest(self,
+               data: dict[str, str] | list[dict[str, str]]) -> None:
         if not self.validate(data):
             raise ValueError("Improper log data")
 
-        def format_log(d):
+        def format_log(d: dict[str, str]) -> str:
             return f"{d.get('log_level', '')}: {d.get('log_message', '')}"
         if isinstance(data, list):
             for d in data:
@@ -94,44 +95,44 @@ if __name__ == "__main__":
     # tumeric
     print("\nTesting Numeric Processor...")
     num = NumericProcessor()
-    print(f" Trying to validate input '42': {num.validate(42)}")
-    print(f" Trying to validate input 'Hello': {num.validate('Hello')}")
-    print(" Test invalid ingestion of string 'foo' without prior validation:")
+    print(f"Trying to validate input '42': {num.validate(42)}")
+    print(f"Trying to validate input 'Hello': {num.validate('Hello')}")
+    print("Test invalid ingestion of string 'foo' without prior validation:")
     try:
         num.ingest("foo")
     except Exception as e:
-        print(f" Got exception: {e}")
-    print(" Processing data: [1, 2, 3, 4, 5]")
+        print(f"Got exception: {e}")
+    print("Processing data: [1, 2, 3, 4, 5]")
     num.ingest([1, 2, 3, 4, 5])
-    print(" Extracting 3 values...")
+    print("Extracting 3 values...")
     for _ in range(3):
         idx, val = num.output()
-        print(f" Numeric value {idx}: {val}")
+        print(f"Numeric value {idx}: {val}")
 
     # text
     print("\nTesting Text Processor...")
     text = TextProcessor()
-    print(f" Trying to validate input '42': {text.validate(42)}")
-    print(" Processing data: ['Hello', 'Nexus', 'World']")
+    print(f"Trying to validate input '42': {text.validate(42)}")
+    print("Processing data: ['Hello', 'Nexus', 'World']")
     text.ingest(['Hello', 'Nexus', 'World'])
-    print(" Extracting 1 value...")
+    print("Extracting 1 value...")
     idx, val = text.output()
-    print(f" Text value {idx}: {val}")
+    print(f"Text value {idx}: {val}")
 
     # leg
     print("\nTesting Log Processor...")
     log = LogProcessor()
-    print(f" Trying to validate input 'Hello': {log.validate('Hello')}")
+    print(f"Trying to validate input 'Hello': {log.validate('Hello')}")
     logs = [
         {'log_level': 'NOTICE', 'log_message': 'Connection to server'},
         {'log_level': 'ERROR', 'log_message': 'Unauthorized access!!'}
     ]
-    print(f" Processing data: {logs}")
+    print(f"Processing data: {logs}")
     log.ingest(logs)
-    print(" Extracting 2 values...")
+    print("Extracting 2 values...")
     for _ in range(2):
         idx, val = log.output()
-        print(f" Log entry {idx}: {val}")
+        print(f"Log entry {idx}: {val}")
 
 # class DataProcessor(ABC):
 #     @abstractmethod

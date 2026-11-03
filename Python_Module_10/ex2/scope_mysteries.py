@@ -1,7 +1,8 @@
-from typing import Callable, Any
+from collections.abc import Callable
+from typing import Any
 
 
-def mage_counter() -> Callable:
+def mage_counter() -> Callable[[], int]:
     count = 0
 
     def counter() -> int:
@@ -12,7 +13,7 @@ def mage_counter() -> Callable:
     return counter
 
 
-def spell_accumulator(initial_power: int) -> Callable:
+def spell_accumulator(initial_power: int) -> Callable[[int], int]:
     total = initial_power
 
     def accumulate(power: int) -> int:
@@ -23,14 +24,14 @@ def spell_accumulator(initial_power: int) -> Callable:
     return accumulate
 
 
-def enchantment_factory(enchantment_type: str) -> Callable:
+def enchantment_factory(enchantment_type: str) -> Callable[[str], str]:
     def enchant(item_name: str) -> str:
         return f"{enchantment_type} {item_name}"
     return enchant
 
 
 def memory_vault() -> dict[str, Callable]:
-    memory = {}
+    memory: dict[str, Any] = {}
 
     def store(key: str, value: Any) -> None:
         memory[key] = value
@@ -41,8 +42,7 @@ def memory_vault() -> dict[str, Callable]:
     return {"store": store, "recall": recall}
 
 
-if __name__ == "__main__":
-
+def main() -> None:
     print("Testing mage counter...")
     counter_a = mage_counter()
     counter_b = mage_counter()
@@ -86,3 +86,7 @@ if __name__ == "__main__":
     #     print()
     #     for item in items_to_enchant:
     #         print(factory(item))
+
+
+if __name__ == "__main__":
+    main()

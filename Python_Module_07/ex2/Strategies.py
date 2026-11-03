@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from ex0.Creature import Creature
 from ex1.Capabilities import HealCapability, TransformCapability
 
 
@@ -8,28 +9,28 @@ class InvalidStrategyError(Exception):
 
 class BattleStrategy(ABC):
     @abstractmethod
-    def is_valid(self, creature) -> bool:
+    def is_valid(self, creature: Creature) -> bool:
         pass
 
     @abstractmethod
-    def act(self, creature) -> list:
+    def act(self, creature: Creature) -> list[str]:
         pass
 
 
 class NormalStrategy(BattleStrategy):
-    def is_valid(self, creature) -> bool:
+    def is_valid(self, creature: Creature) -> bool:
         return True
 
-    def act(self, creature) -> list:
+    def act(self, creature: Creature) -> list[str]:
         return [creature.attack()]
 
 
 class AggressiveStrategy(BattleStrategy):
-    def is_valid(self, creature) -> bool:
+    def is_valid(self, creature: Creature) -> bool:
         return isinstance(creature, TransformCapability)
 
-    def act(self, creature) -> list:
-        if not self.is_valid(creature):
+    def act(self, creature: Creature) -> list[str]:
+        if not isinstance(creature, TransformCapability):
             raise InvalidStrategyError(
                 f"Invalid Creature '{creature.name}' for this "
                 "aggressive strategy"
@@ -43,11 +44,11 @@ class AggressiveStrategy(BattleStrategy):
 
 
 class DefensiveStrategy(BattleStrategy):
-    def is_valid(self, creature) -> bool:
+    def is_valid(self, creature: Creature) -> bool:
         return isinstance(creature, HealCapability)
 
-    def act(self, creature) -> list:
-        if not self.is_valid(creature):
+    def act(self, creature: Creature) -> list[str]:
+        if not isinstance(creature, HealCapability):
             raise InvalidStrategyError(
                 f"Invalid Creature '{creature.name}' for this defensive "
                 "strategy"

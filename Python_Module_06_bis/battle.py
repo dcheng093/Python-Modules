@@ -13,9 +13,9 @@ def test_battle(first: CreatureFactory, second: CreatureFactory) -> None:
     a = first.create_base()
     b = second.create_base()
     print(a.describe())
-    print(" vs.")
+    print("vs.")
     print(b.describe())
-    print(" fight!")
+    print("fight!")
     print(a.attack())
     print(b.attack())
 

@@ -2,32 +2,34 @@
 
 
 class Plant:
-    def __init__(self, name: str, height: float, age: int) -> None:
-        self.name = name.capitalize()
+    def __init__(self, name: str, height: float, age: int,
+                 growth_rate: float = 1.0) -> None:
+        self.name = name
         self.height = height
-        self.age = age
+        self.days_old = age
+        self.growth_rate = growth_rate
 
-    def grow(self, cm: float) -> None:
-        self.height += cm
+    def grow(self) -> None:
+        self.height += self.growth_rate
 
-    def age_by(self, days: int) -> None:
-        self.age += days
+    def age(self, days: int = 1) -> None:
+        self.days_old += days
 
-    def show(self) -> str:
-        return (f"{self.name}: {round(self.height, 1)}cm, {self.age} days old")
+    def show(self) -> None:
+        print(f"{self.name}: {self.height:.1f}cm, {self.days_old} days old")
 
 
 if __name__ == "__main__":
-    plant1 = Plant("Rose", 24.2, 29)
-    start_height: float = plant1.height
+    rose = Plant("Rose", 25.0, 30, growth_rate=0.8)
+    start_height = rose.height
     print("=== Garden Plant Growth ===")
+    rose.show()
     for day in range(1, 8):
-        print(f"=== Day {day} ====")
-        plant1.grow(0.8)
-        plant1.age_by(1)
-        print(plant1.show())
-    total_growth: int = round(plant1.height - start_height)
-    print(f"Growth this week: {total_growth}cm")
+        print(f"=== Day {day} ===")
+        rose.grow()
+        rose.age()
+        rose.show()
+    print(f"Growth this week: {round(rose.height - start_height, 1)}cm")
 
 # class Plant:
 #     def __init__(self, name, height, age):

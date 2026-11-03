@@ -1,26 +1,41 @@
 #!/usr/bin/python3.10
 
 import sys
+import typing
 
-if __name__ == "__main__":
+
+def read_archive(filename: str) -> str | None:
+    try:
+        f: typing.IO[str] = open(filename, "r")
+    except OSError as e:
+        print(f"Error opening file '{filename}': {e}")
+        return None
+    try:
+        content = f.read()
+    except (OSError, ValueError) as e:
+        print(f"Error reading file '{filename}': {e}")
+        return None
+    finally:
+        f.close()
+    print("---\n")
+    print(content.rstrip("\n"))
+    print("\n---")
+    print(f"File '{filename}' closed.")
+    return content
+
+
+def main() -> None:
     if len(sys.argv) != 2:
-        print("Usage: ft_ancient_text.py <file>\n")
-        sys.exit(1)
-
+        print("Usage: ft_ancient_text.py <file>")
+        return
     filename = sys.argv[1]
     print("=== Cyber Archives Recovery ===")
     print(f"Accessing file '{filename}'")
+    read_archive(filename)
 
-    try:
-        with open(filename, "r") as f:
-            print("---\n")
-            for line in f:
-                print(line.rstrip())
-            print("\n---")
-    except Exception as e:
-        print(f"Error opening file '{filename}': {e}\n")
-    else:
-        print(f"File '{filename}' closed.")
+
+if __name__ == "__main__":
+    main()
 
 # print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===\n")
 # filename = "ancient_fragment.txt"
