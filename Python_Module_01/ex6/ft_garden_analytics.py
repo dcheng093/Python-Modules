@@ -22,7 +22,7 @@ class Plant:
         return days > 365
 
 # @classmethod exists comes down to clean object-oriented design
-# Create objects in different formats or track global class data
+# Create objects in different formats or track global class data.
 
     @classmethod
     def anonymous(cls):
