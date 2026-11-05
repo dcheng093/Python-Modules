@@ -11,6 +11,9 @@ class CreatureFactory(ABC):
     def create_evolved(self) -> Creature:
         pass
 
+    def label(self) -> str:
+        return self.create_base().name
+
 
 class FlameFactory(CreatureFactory):
     def create_base(self) -> Creature:

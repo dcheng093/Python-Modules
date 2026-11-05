@@ -1,4 +1,4 @@
-#!/usr/bin/python3.10
+#!/usr/bin/env python3
 
 # from time import perf_counter as timer
 import random

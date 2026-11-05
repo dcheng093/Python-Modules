@@ -1,4 +1,4 @@
-#!/usr/bin/python3.10
+#!/usr/bin/env python3
 
 def secure_archive(filename: str,
                    action: str = "read",

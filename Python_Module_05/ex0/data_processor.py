@@ -1,10 +1,10 @@
-#!/usr/bin/python3.10
-
 from abc import ABC, abstractmethod
 from typing import Any
 
 
 class DataProcessor(ABC):
+    name: str = "Data Processor"
+
     def __init__(self) -> None:
         self._data: list[str] = []
         self._index: int = 0
@@ -25,8 +25,13 @@ class DataProcessor(ABC):
         self._index += 1
         return (idx, value)
 
+    def remaining(self) -> int:
+        return len(self._data)
+
 
 class NumericProcessor(DataProcessor):
+    name = "Numeric Processor"
+
     def validate(self, data: Any) -> bool:
         if isinstance(data, (int, float)):
             return True
@@ -45,6 +50,8 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
+    name = "Text Processor"
+
     def validate(self, data: Any) -> bool:
         if isinstance(data, str):
             return True
@@ -62,6 +69,8 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
+    name = "Log Processor"
+
     def validate(self, data: Any) -> bool:
         def valid_dict(d: Any) -> bool:
             return (

@@ -3,6 +3,9 @@ from .Creatures import Sproutling, Bloomelle, Shiftling, Morphagon
 
 
 class HealingCreatureFactory(CreatureFactory):
+    def label(self) -> str:
+        return "Healing"
+
     def create_base(self) -> Sproutling:
         return Sproutling()
 
@@ -11,6 +14,9 @@ class HealingCreatureFactory(CreatureFactory):
 
 
 class TransformCreatureFactory(CreatureFactory):
+    def label(self) -> str:
+        return "Transform"
+
     def create_base(self) -> Shiftling:
         return Shiftling()
 

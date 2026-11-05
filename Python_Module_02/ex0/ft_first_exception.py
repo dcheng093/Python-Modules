@@ -1,4 +1,4 @@
-#!/usr/bin/python3.10
+#!/usr/bin/env python3
 
 def input_temperature(temp_str: str) -> int:
     return int(temp_str)

@@ -1,4 +1,4 @@
-#!/usr/bin/python3.10
+#!/usr/bin/env python3
 
 class Plant:
     def __init__(self, name: str, height: float, age: int,
@@ -60,11 +60,11 @@ class Flower(Plant):
 
     def show(self) -> None:
         super().show()
-        print(f" Color: {self.color}")
+        print(f"Color: {self.color}")
         if self.bloomed:
-            print(f" {self.name} is blooming beautifully!")
+            print(f"{self.name} is blooming beautifully!")
         else:
-            print(f" {self.name} has not bloomed yet")
+            print(f"{self.name} has not bloomed yet")
 
 
 class Tree(Plant):
@@ -80,7 +80,7 @@ class Tree(Plant):
 
     def show(self) -> None:
         super().show()
-        print(f" Trunk diameter: {self.trunk_diameter:.1f}cm")
+        print(f"Trunk diameter: {self.trunk_diameter:.1f}cm")
 
 
 class Vegetable(Plant):
@@ -100,8 +100,8 @@ class Vegetable(Plant):
 
     def show(self) -> None:
         super().show()
-        print(f" Harvest season: {self.harvest_season}")
-        print(f" Nutritional value: {round(self.nutritional_value)}")
+        print(f"Harvest season: {self.harvest_season}")
+        print(f"Nutritional value: {round(self.nutritional_value)}")
 
 
 if __name__ == "__main__":

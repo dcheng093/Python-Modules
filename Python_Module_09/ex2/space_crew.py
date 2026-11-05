@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field, model_validator, ValidationError
 from datetime import datetime
 
 
-class Rank(str, Enum):
+class Rank(Enum):
     cadet = "cadet"
     officer = "officer"
     lieutenant = "lieutenant"
@@ -50,9 +50,8 @@ class SpaceMission(BaseModel):
             raise ValueError(
                 "Long missions require at least 50% experienced crew"
             )
-        for member in self.crew:
-            if member.is_active is False:
-                raise ValueError("All members must be active")
+        if not all(member.is_active for member in self.crew):
+            raise ValueError("All members must be active")
         return self
 
 

@@ -1,10 +1,12 @@
-#!/usr/bin/python3.10
+#!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
-from typing import Any, List
+from typing import Any
 
 
 class DataProcessor(ABC):
+    name: str = "Data Processor"
+
     def __init__(self) -> None:
         self._data: list[str] = []
         self._index: int = 0
@@ -25,8 +27,13 @@ class DataProcessor(ABC):
         self._index += 1
         return (idx, value)
 
+    def remaining(self) -> int:
+        return len(self._data)
+
 
 class NumericProcessor(DataProcessor):
+    name = "Numeric Processor"
+
     def validate(self, data: Any) -> bool:
         if isinstance(data, (int, float)):
             return True
@@ -45,6 +52,8 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
+    name = "Text Processor"
+
     def validate(self, data: Any) -> bool:
         if isinstance(data, str):
             return True
@@ -62,6 +71,8 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
+    name = "Log Processor"
+
     def validate(self, data: Any) -> bool:
         def valid_dict(d: Any) -> bool:
             return (
@@ -91,23 +102,28 @@ class LogProcessor(DataProcessor):
 
 class DataStream:
     def __init__(self) -> None:
-        self.processors: List[DataProcessor] = []
+        self.processors: list[DataProcessor] = []
         self.total_processed: dict[DataProcessor, int] = {}
 
     def register_processor(self, proc: DataProcessor) -> None:
         self.processors.append(proc)
         self.total_processed[proc] = 0
 
-    def process_stream(self, stream: List[Any]) -> None:
+    def process_stream(self, stream: list[Any]) -> None:
         for element in stream:
             handled = False
             for proc in self.processors:
                 if proc.validate(element):
-                    proc.ingest(element)
-                    if isinstance(element, list):
-                        self.total_processed[proc] += len(element)
+                    try:
+                        proc.ingest(element)
+                    except ValueError as e:
+                        print(f"DataStream error - {proc.name} failed "
+                              f"on element {element}: {e}")
                     else:
-                        self.total_processed[proc] += 1
+                        if isinstance(element, list):
+                            self.total_processed[proc] += len(element)
+                        else:
+                            self.total_processed[proc] += 1
                     handled = True
                     break
             if not handled:
@@ -120,10 +136,9 @@ class DataStream:
             print("No processor found, no data")
             return
         for proc in self.processors:
-            name = proc.__class__.__name__.replace("Processor", " Processor")
             total = self.total_processed.get(proc, 0)
-            remaining = len(proc._data)
-            print(f"{name}: total {total} items processed, "
+            remaining = proc.remaining()
+            print(f"{proc.name}: total {total} items processed, "
                   f"remaining {remaining} on processor")
 
 

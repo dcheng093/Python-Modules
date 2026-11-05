@@ -7,21 +7,9 @@ Opponent = tuple[CreatureFactory, BattleStrategy]
 
 
 def format_opponents(opponents: list[Opponent]) -> str:
-    result: list[str] = []
-
-    for factory, strategy in opponents:
-        factory_name = factory.__class__.__name__
-        if factory_name in ["FlameFactory", "AquaFactory"]:
-            creature_name = factory.create_base().name
-        elif factory_name == "HealingCreatureFactory":
-            creature_name = "Healing"
-        elif factory_name == "TransformCreatureFactory":
-            creature_name = "Transform"
-        else:
-            creature_name = factory_name.replace("Factory", "")
-        strategy_name = strategy.__class__.__name__.replace("Strategy", "")
-        result.append(f"({creature_name}+{strategy_name})")
-    return "[ " + ", ".join(result) + " ]"
+    pairs = [f"({factory.label()}+{strategy.name})"
+             for factory, strategy in opponents]
+    return "[ " + ", ".join(pairs) + " ]"
 
 
 def battle(opponents: list[Opponent]) -> None:

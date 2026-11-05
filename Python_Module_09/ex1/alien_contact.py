@@ -3,7 +3,7 @@ from datetime import datetime
 from enum import Enum
 
 
-class ContactType(str, Enum):
+class ContactType(Enum):
     radio = "radio"
     visual = "visual"
     physical = "physical"

@@ -1,4 +1,4 @@
-#!/usr/bin/python3.10
+#!/usr/bin/env python3
 
 def garden_operations(operation_number: int) -> None:
     if operation_number == 0:

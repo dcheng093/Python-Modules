@@ -8,6 +8,8 @@ class InvalidStrategyError(Exception):
 
 
 class BattleStrategy(ABC):
+    name: str = "Strategy"
+
     @abstractmethod
     def is_valid(self, creature: Creature) -> bool:
         pass
@@ -18,6 +20,8 @@ class BattleStrategy(ABC):
 
 
 class NormalStrategy(BattleStrategy):
+    name = "Normal"
+
     def is_valid(self, creature: Creature) -> bool:
         return True
 
@@ -26,6 +30,8 @@ class NormalStrategy(BattleStrategy):
 
 
 class AggressiveStrategy(BattleStrategy):
+    name = "Aggressive"
+
     def is_valid(self, creature: Creature) -> bool:
         return isinstance(creature, TransformCapability)
 
@@ -44,6 +50,8 @@ class AggressiveStrategy(BattleStrategy):
 
 
 class DefensiveStrategy(BattleStrategy):
+    name = "Defensive"
+
     def is_valid(self, creature: Creature) -> bool:
         return isinstance(creature, HealCapability)
 
